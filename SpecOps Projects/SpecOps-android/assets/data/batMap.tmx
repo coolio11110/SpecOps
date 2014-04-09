@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="5" height="8" tilewidth="512" tileheight="512">
+ <tileset firstgid="1" name="dustvg" tilewidth="512" tileheight="512">
+  <image source="dustvg.png" width="8192" height="6656"/>
+ </tileset>
+ <tileset firstgid="209" name="crate" tilewidth="512" tileheight="512">
+  <image source="crate.png" trans="ffffff" width="512" height="512"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="5" height="8">
+  <data encoding="base64" compression="zlib">
+   eJwTZWBg4ETDgkDMBcTCUBqGDaG0KBDrQWlhLPK6QMwGlQdhYyD2RsIgNX5A7AXFgUDMiiYGwuxADAA4jwVh
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="5" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAOLqLR+NQQA9DNI1YvAJ9rBOc=
+  </data>
+ </layer>
+</map>
