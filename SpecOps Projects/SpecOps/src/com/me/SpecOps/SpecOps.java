@@ -1,12 +1,12 @@
 package com.me.SpecOps;
 
 import com.badlogic.gdx.Game;
-import com.me.SpecOps.screens.Play;
+import com.me.SpecOps.screens.Main;
 
 public class SpecOps extends Game {
 	@Override
 	public void create() {	
-		setScreen(new Play(this));
+		setScreen(new Main(this));
 	}
 
 	@Override

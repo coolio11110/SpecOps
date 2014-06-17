@@ -1,0 +1,67 @@
+specOps16px.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+agent_16px
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+agent_16px
+  rotate: false
+  xy: 20, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+agent_16px
+  rotate: false
+  xy: 38, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+button
+  rotate: false
+  xy: 56, 2
+  size: 182, 56
+  orig: 182, 56
+  offset: 0, 0
+  index: -1
+enemy_16px
+  rotate: false
+  xy: 240, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+enemy_16px
+  rotate: false
+  xy: 258, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+enemy_16px
+  rotate: false
+  xy: 276, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 2
+replayDown
+  rotate: false
+  xy: 2, 60
+  size: 456, 148
+  orig: 456, 148
+  offset: 0, 0
+  index: -1
+replayUp
+  rotate: false
+  xy: 2, 210
+  size: 466, 164
+  orig: 466, 164
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="11" height="17" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="dustvg16" tilewidth="16" tileheight="16">
+  <image source="dustvg16px.png" trans="ffffff" width="256" height="208"/>
+ </tileset>
+ <tileset firstgid="209" name="crate" tilewidth="16" tileheight="16">
+  <image source="SpecOps/crate16px.png" trans="ffffff" width="16" height="16"/>
+ </tileset>
+ <layer name="Ground" width="11" height="17">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYKIRVicCa0LVchKB1YBYC8ouwINhamHmFgIxD5QtiIQLcagVQFIjCsSKONQGQdUYIanXxaOWBc1+QyBmhapBVhsDldcHYgWoe0ByHlAz0NUaA7E3EuaAinOgqa0GYi8kHAhVH4DFvSC1vlgwNrWeQFyJBWNTS0wcg9SqEoElGEhLjwATaxiO
+  </data>
+ </layer>
+ <layer name="Crates" width="11" height="17">
+  <properties>
+   <property name="blocked" value="blocked"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF2MBFNJqaZtICEOteWrphsAMA1mIE5w==
+  </data>
+ </layer>
+</map>

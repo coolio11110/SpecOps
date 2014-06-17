@@ -38,28 +38,32 @@ public class Bullet  {
 	
 	//direction of bullet - add to coordinates to align with gun
 	private void bulletDirection(float x, float y, float dir) {
+		//for 512px -- xbeg/ybeg +400.0f, yend -200.0f
 		if(dir == 90.0f) {
-			xBeg = x + 400.0f;
-			yBeg = y + 400.0f;
+			xBeg = x + 12.8f;
+			yBeg = y + 12.8f;
 			xEnd = xBeg;
-			yEnd = yBeg + 200.0f;
+			yEnd = yBeg + 6.4f;
 		}
+		//for 512px -- xbeg +112.0f, yend -200.0f
 		else if(dir == 270.0f) {
-			xBeg = x + 112.0f;
+			xBeg = x + 3.5f;
 			yBeg = y;
 			xEnd = xBeg;
-			yEnd = yBeg - 200.0f;
+			yEnd = yBeg - 6.4f;
 		}
+		//for 512px -- ybeg +400.0f, xend -200.0f
 		else if(dir == 180.0f) {
 			xBeg = x;
-			yBeg = y + 400.0f;
-			xEnd = xBeg - 200.0f;
+			yBeg = y + 12.8f;
+			xEnd = xBeg - 6.4f;
 			yEnd = yBeg;
 		}
+		//for 512px -- xbeg +400.0f, ybeg +112.0f, xend +200.0f
 		else if(dir == 0.0f) {
-			xBeg = x + 400.0f;
-			yBeg = y + 112.0f;
-			xEnd = xBeg + 200.0f;
+			xBeg = x + 12.8f;
+			yBeg = y + 3.5f;
+			xEnd = xBeg + 6.4f;
 			yEnd = yBeg;
 		}
 	}
@@ -67,21 +71,22 @@ public class Bullet  {
 	public void update(float dir) {
 		bulletDirection(xVal,yVal,dir);
 		
+		//for 512px -- 256.0f
 		if(dir == 90.0f) {
-			yBeg += 256.0f;
-			yEnd += 256.0f;
+			yBeg += 8.0;
+			yEnd += 8.0f;
 		}
 		else if(dir == 270.0f) {
-			yBeg -= 256.0f;
-			yEnd -= 256.0f;
+			yBeg -= 8.0f;
+			yEnd -= 8.0f;
 		}
 		else if(dir == 180.0f) {
-			xBeg -= 256.0f;
-			xEnd -= 256.0f;
+			xBeg -= 8.0f;
+			xEnd -= 8.0f;
 		}
 		else if(dir == 0.0f) {
-			xBeg += 256.0f;
-			xEnd += 256.0f;
+			xBeg += 8.0f;
+			xEnd += 8.0f;
 		}
 			
 		lifeTimer++;

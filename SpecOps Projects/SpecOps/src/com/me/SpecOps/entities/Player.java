@@ -7,11 +7,13 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 public class Player extends Sprite implements InputProcessor  {
@@ -20,23 +22,25 @@ public class Player extends Sprite implements InputProcessor  {
 	}
 	
 	private static Vector2 velocity = new Vector2(); //movement velocity
-	private static float speed = 22.628f; //how fast move; equates to ~512px(512.02637)
+	private static float speed = 4.0f; //how fast move; 22.628f equates to ~512px(512.02637)
 	private static int sX = 0,sY = 0;
 	private int moves;
-	private float health, direction = 0.0f;
+	private float opponentPosX, opponentPosY, opponentDir, health, direction = 0.0f;
 	private TiledMapTileLayer collisionLayer;
 	private Array<Sprite> animMove;
 	private state curState = state.IDLE;
 	private ArrayList<Bullet> bullets;
 	private String id;
+	private OrthographicCamera cam;
 	
 	
-	public Player(Array<Sprite> animMove, TiledMapTileLayer collisionLayer, ArrayList<Bullet> bullets, String id) {
+	public Player(Array<Sprite> animMove, TiledMapTileLayer collisionLayer, ArrayList<Bullet> bullets, String id, OrthographicCamera cam) {
 		super(animMove.get(0));
 		this.animMove = animMove;
 		this.collisionLayer = collisionLayer;
 		this.bullets = bullets;
 		this.id = id;
+		this.cam = cam;
 		moves = 3;
 		health = 3;
 	}
@@ -71,38 +75,40 @@ public class Player extends Sprite implements InputProcessor  {
 	}
 	
 	public void isHit() {
-		if(bullets.size() > 0 && id.charAt(0) != bullets.get(0).getbulID().charAt(0)) {
-			if((bullets.get(0).getX() > getX() && bullets.get(0).getX() < getX()+512.02637f) && (bullets.get(0).getY() > getY() && bullets.get(0).getY() < getY()+512.02637f )) {
-				setHealth(getHealth()-0.3f);
-			}
-		}
+		if(bullets.size() > 0 
+				&& id.charAt(0) != bullets.get(0).getbulID().charAt(0) 
+				//check if bullet in next grid -- add one tile
+				&& (bullets.get(0).getX() > getX() 
+				&& bullets.get(0).getX() < getX()+16.0f) 
+				&& (bullets.get(0).getY() > getY() 
+				&& bullets.get(0).getY() < getY()+16.0f ))
+			setHealth(getHealth()-0.5f);
 		
-		if(health <= 0) {
+		if(health <= 0) 
 			setState(state.DEAD);
-		}
 	}
 	
 	public void shoot() {
-		if(moves <= 0)
-			return;
-		bullets.add(new Bullet(getX(),getY(),getDirection(),getId()));
-		moves--;
+		if(moves > 0) {
+			bullets.add(new Bullet(getX(),getY(),getDirection(),getId()));
+			setMoves(getMoves()-1);
+		}
 	}
 	
 	//check if cell id blocked
 	public boolean blockedCell(float x, float y) {
 		int xVal = (int) (x / collisionLayer.getTileWidth()),
 			yVal =  (int) (y / collisionLayer.getTileHeight());
-		
+				
 		//if coordinates are out of the map - blocked
-		if(xVal < 0 || xVal > collisionLayer.getWidth()-1 || yVal < 0 || yVal > collisionLayer.getHeight()-1 )
-			return true;
-		
+		//for 512px -- xVal < 0 || xVal > collisionLayer.getWidth()-1 || yVal < 0 || yVal > collisionLayer.getHeight()-1 
+
 		Cell cell = collisionLayer.getCell(xVal,yVal);
-		return (cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked"));
+		//&& cell.getTile().getProperties().containsKey("blocked")
+		return (cell != null && cell.getTile() != null) || xVal < 3 || xVal > 7 || yVal < 4 || yVal > 11 || (xVal == (opponentPosX/collisionLayer.getTileWidth()) && yVal == (opponentPosY/collisionLayer.getTileHeight()));
 	}
 	
-	//getWidth() - get width of sprite which = 512px
+	//getWidth() - get width of sprite
 	public boolean collidesRight() {
 		return blockedCell(getX() + getWidth(),getY());
 	}
@@ -111,13 +117,31 @@ public class Player extends Sprite implements InputProcessor  {
 		return blockedCell(getX() - getWidth(),getY());
 	}
 	
-	//getHeight() - get height of sprite which = 512px
+	//getHeight() - get height of sprite
 	public boolean collidesTop() {
 		return blockedCell(getX(),getY() + getHeight());
 	}
 	
 	public boolean collidesBottom() {
 		return blockedCell(getX(),getY() - getHeight());
+	}
+	
+	public void getOpponentPos(float x, float y, float dir) {
+		opponentPosX = x;
+		opponentPosY = y;
+		opponentDir = dir;
+	}
+	
+	public float getOpponentX() {
+		return opponentPosX;
+	}
+	
+	public float getOpponentY() {
+		return opponentPosY;
+	}
+	
+	public float getOpponentDirection() {
+		return opponentDir;
 	}
 	
 	public void setMoves(int moves) {
@@ -238,27 +262,38 @@ public class Player extends Sprite implements InputProcessor  {
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(!Gdx.app.getType().equals(ApplicationType.Android))
 			return false;
-		sX = screenX;
-		sY = screenY;
-		if(screenX < getX() && (getX() - screenX) > (Math.abs(getY() - screenY))) {
+		else if (screenX > 600 && screenY > 1200)
+			return false;
+		
+		Vector3 touch = new Vector3(screenX,screenY,0);
+		cam.unproject(touch);
+		
+		sX = (int) touch.x;
+		sY = (int) touch.y;
+
+		//left
+		if(touch.x < getX() && (touch.y >= getY()-1 && touch.y <= getY()+16)) {
 			curState = state.WALKING;
 			direction = 180.0f;
 			velocity.x = -speed;
 			update(-speed);
 		}
-		else if(screenX > getX() && (screenX - getX()) > (Math.abs(getY() - screenY))) {
+		//right
+		else if(touch.x > getX() && (touch.y >= getY()-1 && touch.y <= getY()+16)) {
 			curState = state.WALKING;
 			direction = 0.0f;
 			velocity.x = speed;
 			update(speed);
 		}
-		else if(screenY < getY() && (getY() - screenY) > (Math.abs(getX() - screenX))) {
+		//down
+		else if(touch.y < getY() && (touch.x >= getX()-2 && touch.x <= getX()+16)) {
 			curState = state.WALKING;
 			direction = 270.0f;
 			velocity.y = -speed;
 			update(-speed);
 		}
-		else if(screenY > getY() && (screenY - getY()) > (Math.abs(getX() - screenX))) {
+		//up
+		else if(touch.y > getY() && (touch.x >= getX()-2 && touch.x <= getX()+16)) {
 			curState = state.WALKING;
 			direction = 90.0f;
 			velocity.y = speed;

@@ -8,7 +8,7 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "SpecOps";
 		cfg.width = 500;
-		cfg.height = 475;
+		cfg.height = 800;
 		
 		new LwjglApplication(new SpecOps(), cfg);
 	}
